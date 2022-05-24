@@ -1,4 +1,4 @@
-package com.appsbykeegan.watcher_storageapi.entity;
+package com.appsbykeegan.watcher_storageapi.entity.table;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,6 +47,7 @@ public class FileAttributes {
     private String lastModified;
     private String driveLetter;
     private String fileStatus;
+
 
     public FileAttributes(String fileName, String dateAdded, String lastModified, String driveLetter, String fileStatus) {
         this.fileName = fileName;
