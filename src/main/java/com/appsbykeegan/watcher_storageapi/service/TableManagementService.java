@@ -1,6 +1,7 @@
 package com.appsbykeegan.watcher_storageapi.service;
 
 import com.appsbykeegan.watcher_storageapi.entity.models.ApiResponseBody;
+import com.appsbykeegan.watcher_storageapi.entity.models.DeleteRequestBody;
 import com.appsbykeegan.watcher_storageapi.entity.models.FileAttributeModel;
 import com.appsbykeegan.watcher_storageapi.entity.table.FileAttributes;
 import com.appsbykeegan.watcher_storageapi.repository.AppRepository;
@@ -105,11 +106,11 @@ public class TableManagementService {
     }
 
 
-    public ApiResponseBody DeleteFileReport(String fileName, String localDateTimeAdded, String driveLetter) {
+    public ApiResponseBody DeleteFileReport(DeleteRequestBody deleteRequestBody) {
 
         // Data analysis
 
-        if (fileName.isEmpty() || driveLetter.isEmpty()) {
+        if (deleteRequestBody.getFileName().isEmpty() || deleteRequestBody.getDriverLetter().isEmpty()) {
 
             // add other necessary data checks
 
@@ -120,15 +121,15 @@ public class TableManagementService {
 
         try {
 
-            Optional<FileAttributes> optionalFileAttributes = appRepository.findByFileName(fileName);
+            Optional<FileAttributes> optionalFileAttributes = appRepository.findByFileName(deleteRequestBody.getFileName());
 
             if (optionalFileAttributes.isEmpty()) {
 
                 return new ApiResponseBody(500,"No such file found ",null);
             }
 
-            if (optionalFileAttributes.get().getDateAdded().equals(localDateTimeAdded) && optionalFileAttributes
-                    .get().getDriveLetter().equals(driveLetter)) {
+            if (optionalFileAttributes.get().getDateAdded().equals(deleteRequestBody.getDateTime()) && optionalFileAttributes
+                    .get().getDriveLetter().equals(deleteRequestBody.getDriverLetter())) {
 
                 appRepository.delete(optionalFileAttributes.get());
                 return new ApiResponseBody(200,"Entry successfully deleted",null);
