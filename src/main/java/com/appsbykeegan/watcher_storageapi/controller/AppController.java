@@ -69,9 +69,9 @@ public class AppController {
     }
 
     @PostMapping(path = "/delete-file_report")
-    private ApiResponseBody Deleting_ReportData(@RequestBody FileAttributeModel fileAttributeModel) {
+    private ApiResponseBody Deleting_ReportData(@RequestParam String fileName, String localDateTimeAdded, String driveLetter) {
 
-        return tableManagementService.DeleteFileReport(fileAttributeModel);
+        return tableManagementService.DeleteFileReport(fileName, localDateTimeAdded, driveLetter);
     }
 
 }

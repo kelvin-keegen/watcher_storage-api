@@ -78,7 +78,7 @@ public class TableManagementService {
 
         } else {
 
-            return new ApiResponseBody(400,"A user error is present from the data received",null);
+            return new ApiResponseBody(400,"An error is present from the data received",null);
         }
 
         // Business logic adding data to database
@@ -104,9 +104,42 @@ public class TableManagementService {
 
     }
 
-    public ApiResponseBody DeleteFileReport(FileAttributeModel fileAttributeModel) {
 
-        return new ApiResponseBody(200,"File report modified",null);
+    public ApiResponseBody DeleteFileReport(String fileName, String localDateTimeAdded, String driveLetter) {
+
+        // Data analysis
+
+        if (fileName.isEmpty() || driveLetter.isEmpty()) {
+
+            // add other necessary data checks
+
+            return new ApiResponseBody(400,"An error is present from the data received",null);
+        }
+
+        // Business logic for deleting entry from database
+
+        try {
+
+            Optional<FileAttributes> optionalFileAttributes = appRepository.findByFileName(fileName);
+
+            if (optionalFileAttributes.isEmpty()) {
+
+                return new ApiResponseBody(500,"No such file found ",null);
+            }
+
+            if (optionalFileAttributes.get().getDateAdded().equals(localDateTimeAdded) && optionalFileAttributes
+                    .get().getDriveLetter().equals(driveLetter)) {
+
+                appRepository.delete(optionalFileAttributes.get());
+                return new ApiResponseBody(200,"Entry successfully deleted",null);
+            }
+
+        } catch (Exception exception) {
+
+            log.error("An error encountered, exception message: {}", exception.getMessage());
+            return new ApiResponseBody(500, "Something went wrong!", null);
+        }
+
+        return new ApiResponseBody(500,"Unhandled exception case found",null);
     }
-
 }
