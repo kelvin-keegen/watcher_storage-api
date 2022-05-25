@@ -13,6 +13,6 @@ public class FileAttributeModel {
     private String dateAdded;
     private String lastModified;
     private String driveLetter;
-    private String fileStatus;
+    private String driveLetterName;
 
 }

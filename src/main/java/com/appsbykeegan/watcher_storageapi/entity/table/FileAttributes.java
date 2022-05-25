@@ -46,14 +46,14 @@ public class FileAttributes {
     private String dateAdded;
     private String lastModified;
     private String driveLetter;
-    private String fileStatus;
+    private String driveLetterName;
 
 
-    public FileAttributes(String fileName, String dateAdded, String lastModified, String driveLetter, String fileStatus) {
+    public FileAttributes(String fileName, String dateAdded, String lastModified, String driveLetter, String driveLetterName) {
         this.fileName = fileName;
         this.dateAdded = dateAdded;
         this.lastModified = lastModified;
         this.driveLetter = driveLetter;
-        this.fileStatus = fileStatus;
+        this.driveLetterName = driveLetterName;
     }
 }

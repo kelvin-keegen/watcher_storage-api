@@ -74,7 +74,7 @@ public class TableManagementService {
                     fileAttributeModel.getDateAdded(),
                     fileAttributeModel.getLastModified(),
                     fileAttributeModel.getDriveLetter(),
-                    fileAttributeModel.getFileStatus()
+                    fileAttributeModel.getDriveLetterName()
             );
 
         } else {
@@ -105,7 +105,6 @@ public class TableManagementService {
 
     }
 
-
     public ApiResponseBody DeleteFileReport(DeleteRequestBody deleteRequestBody) {
 
         // Data analysis
@@ -125,13 +124,17 @@ public class TableManagementService {
 
             if (optionalFileAttributes.isEmpty()) {
 
-                return new ApiResponseBody(500,"No such file found",null);
+                log.warn("No such file found, fileName: {}",deleteRequestBody.getFileName());
+                return new ApiResponseBody(404,"No such file found",null);
             }
 
-            if (optionalFileAttributes.get().getDateAdded().equals(deleteRequestBody.getDateTime()) && optionalFileAttributes
-                    .get().getDriveLetter().equals(deleteRequestBody.getDriverLetter())) {
+            System.out.println(deleteRequestBody.getDriverLetter());
+            System.out.println(deleteRequestBody.getDriveLetterName());
 
-                appRepository.delete(optionalFileAttributes.get());
+            if (optionalFileAttributes.get().getDriveLetter().equals(deleteRequestBody.getDriverLetter()) && optionalFileAttributes
+                    .get().getDriveLetterName().equals(deleteRequestBody.getDriveLetterName())) {
+
+                appRepository.deleteById(optionalFileAttributes.get().getId());
                 return new ApiResponseBody(200,"Entry successfully deleted",null);
             }
 
@@ -141,6 +144,7 @@ public class TableManagementService {
             return new ApiResponseBody(500, "Something went wrong!", null);
         }
 
+        log.error("Unhandled exception case found");
         return new ApiResponseBody(500,"Unhandled exception case found",null);
     }
 }
