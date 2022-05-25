@@ -125,7 +125,7 @@ public class TableManagementService {
 
             if (optionalFileAttributes.isEmpty()) {
 
-                return new ApiResponseBody(500,"No such file found ",null);
+                return new ApiResponseBody(500,"No such file found",null);
             }
 
             if (optionalFileAttributes.get().getDateAdded().equals(deleteRequestBody.getDateTime()) && optionalFileAttributes
