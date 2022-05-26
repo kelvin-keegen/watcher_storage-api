@@ -1,7 +1,7 @@
 package com.appsbykeegan.watcher_storageapi.service;
 
 import com.appsbykeegan.watcher_storageapi.entity.models.ApiResponseBody;
-import com.appsbykeegan.watcher_storageapi.entity.models.DeleteRequestBody;
+import com.appsbykeegan.watcher_storageapi.entity.models.DeleteBodyModel;
 import com.appsbykeegan.watcher_storageapi.entity.models.FileAttributeModel;
 import com.appsbykeegan.watcher_storageapi.entity.table.FileAttributes;
 import com.appsbykeegan.watcher_storageapi.repository.AppRepository;
@@ -79,6 +79,7 @@ public class TableManagementService {
 
         } else {
 
+            log.error("Data transmitted might have an unexpected attribute, examine data: {}",fileAttributeModel);
             return new ApiResponseBody(400,"An error is present from the data received",null);
         }
 
@@ -90,11 +91,12 @@ public class TableManagementService {
 
             if (optionalFileAttributes.isPresent()) {
 
-                return new ApiResponseBody(500,"Report data already exists",null);
+                log.warn("Report data already exists");
+                return new ApiResponseBody(500,"Report data already exists!",null);
             }
 
             appRepository.save(newReport);
-            return new ApiResponseBody(200,"File report added",null);
+            return new ApiResponseBody(200,"File report added.",null);
 
         } catch (Exception exception) {
 
@@ -105,7 +107,7 @@ public class TableManagementService {
 
     }
 
-    public ApiResponseBody DeleteFileReport(DeleteRequestBody deleteRequestBody) {
+    public ApiResponseBody DeleteFileReport(DeleteBodyModel deleteRequestBody) {
 
         // Data analysis
 
@@ -113,6 +115,7 @@ public class TableManagementService {
 
             // add other necessary data checks
 
+            log.error("Data transmitted might have an unexpected attribute, examine data: {}",deleteRequestBody);
             return new ApiResponseBody(400,"An error is present from the data received",null);
         }
 
@@ -125,17 +128,17 @@ public class TableManagementService {
             if (optionalFileAttributes.isEmpty()) {
 
                 log.warn("No such file found, fileName: {}",deleteRequestBody.getFileName());
-                return new ApiResponseBody(404,"No such file found",null);
+                return new ApiResponseBody(404,"No such file found.",null);
             }
 
             System.out.println(deleteRequestBody.getDriverLetter());
-            System.out.println(deleteRequestBody.getDriveLetterName());
+            System.out.println(deleteRequestBody.getUsbDriveName());
 
             if (optionalFileAttributes.get().getDriveLetter().equals(deleteRequestBody.getDriverLetter()) && optionalFileAttributes
-                    .get().getDriveLetterName().equals(deleteRequestBody.getDriveLetterName())) {
+                    .get().getDriveLetterName().equals(deleteRequestBody.getUsbDriveName())) {
 
                 appRepository.deleteById(optionalFileAttributes.get().getId());
-                return new ApiResponseBody(200,"Entry successfully deleted",null);
+                return new ApiResponseBody(200,"Entry successfully deleted.",null);
             }
 
         } catch (Exception exception) {
@@ -144,7 +147,7 @@ public class TableManagementService {
             return new ApiResponseBody(500, "Something went wrong!", null);
         }
 
-        log.error("Unhandled exception case found");
-        return new ApiResponseBody(500,"Unhandled exception case found",null);
+        log.error("Unhandled exception case found, If statement check was not conducted.");
+        return new ApiResponseBody(500,"Unhandled exception case found.",null);
     }
 }

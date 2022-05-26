@@ -1,7 +1,7 @@
 package com.appsbykeegan.watcher_storageapi.controller;
 
 import com.appsbykeegan.watcher_storageapi.entity.models.ApiResponseBody;
-import com.appsbykeegan.watcher_storageapi.entity.models.DeleteRequestBody;
+import com.appsbykeegan.watcher_storageapi.entity.models.DeleteBodyModel;
 import com.appsbykeegan.watcher_storageapi.entity.models.FileAttributeModel;
 import com.appsbykeegan.watcher_storageapi.service.TableManagementService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,7 +70,7 @@ public class AppController {
     }
 
     @PostMapping(path = "/delete-file_report")
-    private ApiResponseBody Deleting_ReportData(@RequestBody DeleteRequestBody deleteRequestBody) {
+    private ApiResponseBody Deleting_ReportData(@RequestBody DeleteBodyModel deleteRequestBody) {
 
         return tableManagementService.DeleteFileReport(deleteRequestBody);
     }
